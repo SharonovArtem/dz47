@@ -1,0 +1,280 @@
+using System;
+using System.Collections.Generic;
+
+namespace ConsoleApp15
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Flat flat = new Flat();
+
+            flat.ActToAquarium();
+        }
+    }
+
+    class Aquarium
+    {
+
+        private int _maximalFishNumber;
+        private int _id = 0;
+        private List<Fish> _fishList = new List<Fish>();
+
+        public Fish GiveFish()
+        {
+            Fish fish = null;
+
+            if (TryGetFish())
+            {
+                int userInput;
+                Console.WriteLine("Введите id рыбы");
+
+                userInput = Convert.ToInt32(Console.ReadLine());
+
+                for (int i = 0; i < _fishList.Count; i++)
+                {
+                    if (_fishList[i].Id == userInput)
+                    {
+                        fish = _fishList[i];
+
+                        _fishList.Remove(fish);
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Рыб нет!");
+                return null;
+            }
+
+
+            return fish;
+        }
+
+        public List<Fish> ReturnFishList()
+        {
+            return _fishList;
+        }
+
+        public void CreateFish()
+        {
+            Console.WriteLine("Сколько рыб нужно создать?");
+
+            int userInput = Convert.ToInt32(Console.ReadLine());
+
+            _maximalFishNumber = userInput;
+
+            for (int i = 0; i < _maximalFishNumber; i++)
+            {
+                Fish fish = new Fish(0, _id);
+
+                _fishList.Add(fish);
+
+                _id++;
+            }
+        }
+
+        public bool TryGetFish()
+        {
+            if (_fishList.Count > 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public void AddFish(Fish fish)
+        {
+            _fishList.Add(fish);
+        }
+
+        public void showInfo()
+        {
+            for (int i = 0; i < _fishList.Count; i++)
+            {
+                Console.WriteLine("id рыбы " + _fishList[i].Id + " возраст рыбы " + _fishList[i].Age);
+            }
+        }
+
+        public Fish AddFish()
+        {
+            Fish fish = null;
+
+            if (TryGetFish())
+            {
+                int userInput;
+                Console.WriteLine("Введите id рыбы");
+
+                userInput = Convert.ToInt32(Console.ReadLine());
+
+                for (int i = 0; i < _fishList.Count; i++)
+                {
+                    if (_fishList[i].Id == userInput)
+                    {
+                        fish = _fishList[i];
+
+                        _fishList.Remove(fish);
+                    }
+                }
+
+                if (fish == null)
+                {
+                    Console.WriteLine("Такой рыбы нет!");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Рыб нет!");
+                return null;
+            }
+
+            return fish;
+        }
+    }
+
+    class Fish
+    {
+        public int Age { get; private set; }
+        public int Id { get; private set; }
+        
+        public Fish (int age, int id)
+        {
+            Age = age;
+            Id = id;
+        }
+
+        public void GetOlder()
+        {
+            Age++;
+        }
+    }
+
+    class Player
+    {
+        private List<Fish> _fishList = new List<Fish>();
+
+        public void TakeFish(Fish fish)
+        {
+            _fishList.Add(fish);
+        }
+
+        public bool TryGetFish()
+        {
+            if (_fishList.Count > 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public List<Fish> ReturnFishList()
+        {
+            return _fishList;
+        }
+
+        public Fish AddFish()
+        {
+            Fish fish = null;
+
+            if (TryGetFish())
+            {
+                int userInput;
+                Console.WriteLine("Введите id рыбы");
+
+                userInput = Convert.ToInt32(Console.ReadLine());
+
+                for (int i = 0; i < _fishList.Count; i++)
+                {
+                    if (_fishList[i].Id == userInput)
+                    {
+                        fish = _fishList[i];
+
+                        _fishList.Remove(fish);
+                    }
+                }
+
+                if (fish == null)
+                {
+                    Console.WriteLine("Такой рыбы нет!");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Рыб нет!");
+                return null;
+            }            
+
+            return fish;
+        }
+
+        public void ShowInfoAboutFish()
+        {
+            for (int i = 0; i < _fishList.Count; i++)
+            {
+                Console.WriteLine("id рыбы " + _fishList[i].Id + " возраст рыбы " + _fishList[i].Age);
+            }
+        }
+    }
+
+    class Flat
+    {
+        private Player _player = new Player();
+        
+        public void ActToAquarium()
+        {
+            bool isWorking = true;
+
+            Aquarium aquarium = new Aquarium();
+
+            ConsoleKeyInfo commandKey;
+
+            aquarium.CreateFish();
+
+            while (isWorking)
+            {
+                Console.WriteLine("В аквариуме есть");
+                aquarium.showInfo();
+
+                Console.WriteLine("У игрока есть");
+                _player.ShowInfoAboutFish();
+
+                Console.WriteLine("Выберите действие");
+                Console.WriteLine("Добавить новую рыбу - Q");
+                Console.WriteLine("Забрать рыбу - W");
+                Console.WriteLine("Добавить рыбу из инвентаря - E");
+                Console.WriteLine("Выйти из аквариума - Esc");
+
+                commandKey = Console.ReadKey(true);
+
+                if (commandKey.Key == ConsoleKey.Q)
+                {
+                    aquarium.CreateFish();
+                }
+                else if (commandKey.Key == ConsoleKey.W)
+                {
+                    _player.TakeFish(aquarium.GiveFish());
+                }
+                else if(commandKey.Key == ConsoleKey.E)
+                {
+                    aquarium.AddFish(_player.AddFish());
+                }
+                else if (commandKey.Key == ConsoleKey.Escape)
+                {
+                    isWorking = false;
+                }
+
+                for (int i = 0; i < aquarium.ReturnFishList().Count; i++)
+                {
+                    aquarium.ReturnFishList()[i].GetOlder();
+                }
+
+                for (int i = 0; i < _player.ReturnFishList().Count; i++)
+                {
+                    _player.ReturnFishList()[i].GetOlder();
+                }
+            }
+        }
+    }
+}
