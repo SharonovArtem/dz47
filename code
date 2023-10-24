@@ -15,7 +15,6 @@ namespace ConsoleApp15
 
     class Aquarium
     {
-
         private int _maximalFishNumber;
         private int _id = 0;
         private List<Fish> _fishList = new List<Fish>();
@@ -46,7 +45,6 @@ namespace ConsoleApp15
                 Console.WriteLine("Рыб нет!");
                 return null;
             }
-
 
             return fish;
         }
@@ -137,8 +135,8 @@ namespace ConsoleApp15
     {
         public int Age { get; private set; }
         public int Id { get; private set; }
-        
-        public Fish (int age, int id)
+
+        public Fish(int age, int id)
         {
             Age = age;
             Id = id;
@@ -204,7 +202,7 @@ namespace ConsoleApp15
             {
                 Console.WriteLine("Рыб нет!");
                 return null;
-            }            
+            }
 
             return fish;
         }
@@ -221,7 +219,7 @@ namespace ConsoleApp15
     class Flat
     {
         private Player _player = new Player();
-        
+
         public void ActToAquarium()
         {
             bool isWorking = true;
@@ -256,7 +254,7 @@ namespace ConsoleApp15
                 {
                     _player.TakeFish(aquarium.GiveFish());
                 }
-                else if(commandKey.Key == ConsoleKey.E)
+                else if (commandKey.Key == ConsoleKey.E)
                 {
                     aquarium.AddFish(_player.AddFish());
                 }
